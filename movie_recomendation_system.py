@@ -18,7 +18,7 @@ movies = movies.merge(movie_credits, on='title')
     # language 
     # keywords
     # cast
-movies = movies[['movie_id','title','overview','genres','keywords','cast']]
+movies = movies[['movie_id','title','overview','genres','keywords','cast', 'crew']]
 
 # Data pre-processing   
     # 1. removing missing data
@@ -41,7 +41,34 @@ def convert(obj):
         list_names.append(i['name'])
     return list_names
 
-#print(movies['genres'].apply(convert))
 
+movies['genres'] = movies['genres'].apply(convert)
+movies['keywords'] = movies['keywords'].apply(convert)
+
+# now for cast 
+def convert_cast(obj):
+    list_names = []
+    counter = 0
+    for i in ast.literal_eval(obj):
+        if counter != 3:
+            list_names.append(i['name'])
+            counter+=1
+        else:
+            break
+    return list_names
+
+#print(movies['cast'].apply(convert_cast))
+
+movies['cast'] = movies['cast'].apply(convert_cast)
+
+def fetch_director(obj):
+    list_name = []
+    for i in ast.literal_eval(obj):
+        if i['job'] == 'Director':
+            list_name.append(i['name'])
+            break
+    return list_name
+
+movies['crew'] = movies['crew'].apply(fetch_director)
 
 
