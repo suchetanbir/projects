@@ -5,6 +5,10 @@ import ast
 # Vecterization 
 from sklearn.feature_extraction.text import CountVectorizer
 
+#similarity
+from sklearn.metrics.pairwise import cosine_similarity
+
+
 # Importing movies and credit file
 movies = pd.read_csv('tmdb_5000_movies.csv')
 movie_credits = pd.read_csv('tmdb_5000_credits.csv')
@@ -114,5 +118,18 @@ vectors = cv.fit_transform(new_data_movies['tags']).toarray()
 #we will not use euclidian distance but cosine distance 
     # Euclidian distance fails in higher dimmensions 
 
+#distance of every movie with every movie 
+    # so distance of m1 with all 4000 movies
+    # distance of m2 with all 4806 movies 
+    # will have a martix of 4806 X 4806
+similarity = cosine_similarity(vectors)
 
+
+def recommend(movie):
+    index = new_data_movies[new_data_movies['title'] == movie].index[0]
+    distances = sorted(list(enumerate(similarity[index])),reverse=True,key = lambda x: x[1])
+    for i in distances[1:6]:
+        print(new_data_movies.iloc[i[0]].title)
+
+recommend('Gandhi')
 
