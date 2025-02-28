@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import ast 
 
+# Vecterization 
+from sklearn.feature_extraction.text import CountVectorizer
+
 # Importing movies and credit file
 movies = pd.read_csv('tmdb_5000_movies.csv')
 movie_credits = pd.read_csv('tmdb_5000_credits.csv')
@@ -96,6 +99,20 @@ movies['tags'] = movies['overview'] + movies['genres'] + movies['keywords'] + mo
 new_data_movies = movies[['movie_id', 'title', 'tags']]
 new_data_movies['tags'] = new_data_movies['tags'].apply(lambda x: " ".join(x))
 
+
+#Vecterization
+
+#cv will the the most common 5000 words 
+cv = CountVectorizer(max_features=5000,stop_words='english')
+
+#this will convert matrix to an numpy array 
+#will convert the tags to vectors 
+vectors = cv.fit_transform(new_data_movies['tags']).toarray()
+
+
+#Now we will measure the distance between the vectors to get the similarity score 
+#we will not use euclidian distance but cosine distance 
+    # Euclidian distance fails in higher dimmensions 
 
 
 
