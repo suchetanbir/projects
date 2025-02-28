@@ -59,4 +59,6 @@ SIMILARITY SCORE
                     words that dont contribute to the sentance
                     for example 
                             are, to, for , and, from 
-
+            
+            5. Calculate distance between the vectors using cosine distance instead of euclidian distacne 
+                euclidian distance fails in higher dimmensions.
