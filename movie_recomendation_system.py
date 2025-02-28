@@ -72,3 +72,30 @@ def fetch_director(obj):
 movies['crew'] = movies['crew'].apply(fetch_director)
 
 
+#converted the overview of the movies to a list 
+movies['overview'] = movies['overview'].apply(lambda x:x.split())
+
+
+# this function will remove spaces between words, making it easier for our model to search
+def collapse(L):
+    L1 = []
+    for i in L:
+        L1.append(i.replace(" ",""))
+    return L1
+
+movies['cast'] = movies['cast'].apply(collapse)
+movies['crew'] = movies['crew'].apply(collapse)
+movies['genres'] = movies['genres'].apply(collapse)
+movies['keywords'] = movies['keywords'].apply(collapse)
+
+
+# tags which will have the info related to a movie
+movies['tags'] = movies['overview'] + movies['genres'] + movies['keywords'] + movies['cast'] + movies['crew']
+
+# created a new data set for movies with just the required information and converting tags from list to string
+new_data_movies = movies[['movie_id', 'title', 'tags']]
+new_data_movies['tags'] = new_data_movies['tags'].apply(lambda x: " ".join(x))
+
+
+
+
